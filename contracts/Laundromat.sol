@@ -6,14 +6,13 @@ Optimized: yes
 Solidity version: v0.4.4
 */
 
-//TODO: add timeout to recover funds
-
 pragma solidity ^0.4.0;
 
 contract ArithLib {
 
     function jdouble(uint _ax, uint _ay, uint _az) constant returns (uint, uint, uint);
     function jadd(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint);
+    function jsub(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint);
     function jmul(uint _bx, uint _by, uint _bz, uint _n) constant returns (uint, uint, uint);
     function jexp(uint _b, uint _e, uint _m) constant returns (uint);
     function jrecover_y(uint _x, uint _y_bit) constant returns (uint);
@@ -45,7 +44,7 @@ contract Laundromat {
     address private owner;
     bool private atomicLock;
     
-    address internal constant arithAddress = 0x04daec4e1fc6a4b4555b509b7c5c673ebad29f1f;
+    address internal constant arithAddress = 0x600ad7b57f3e6aeee53acb8704a5ed50b60cacd6;
     ArithLib private arithContract;
     mapping (uint => WithdrawInfo) private withdraws;
     mapping (uint => bool) private consumed;
@@ -95,14 +94,14 @@ contract Laundromat {
         if(consumed[uint(sha3([_Ix, _Iy]))]) throw;
 
         WithdrawInfo withdraw = withdraws[uint(msg.sender)];
-        //throw if existing witdhraw in progress
-        if(withdraw.step != 0) throw;
 
         withdraw.sender = msg.sender;
         withdraw.Ix = _Ix;
         withdraw.Iy = _Iy;
         withdraw.signature = _signature;
 
+        withdraw.ring1.length = 0;
+        withdraw.ring2.length = 0;
         withdraw.ring1.push(_x0);
         withdraw.ring2.push(uint(sha3(_x0)));
         
