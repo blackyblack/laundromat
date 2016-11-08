@@ -19,53 +19,68 @@ contract ArithLib {
     uint constant internal Gy = 32670510020758816978083085130507043184471273380659243275938904335757337482424;
     
     function ArithLib() { }
+    
+    function jtest() constant returns (uint) {
+        
+        return(0);
+    }
 
     function jdouble(uint _ax, uint _ay, uint _az) constant returns (uint, uint, uint) {
 
         if(_ay == 0) return (0, 0, 0);
 
-        uint ysq = (_ay * _ay) % P;
-        uint s = (4 * _ax * ysq) % P;
-        uint m = (3 * _ax * _ax) % P;
-        uint nx = (m * m - 2 * s) % P;
-        uint ny = (m * (s - nx) - 8 * ysq * ysq) % P;
-        uint nz = (2 * _ay * _az) % P;
+        uint ysq = mulmod(_ay, _ay, P);
+        uint S = mulmod(
+            mulmod(4, _ax, P),
+            ysq,
+            P);
+        uint M = mulmod(
+            mulmod(3, _ax, P),
+            _ax,
+            P);
+        uint nx = addmod(
+            mulmod(M, M, P),
+            P - mulmod(2, S, P),
+            P);
+        uint ny = addmod(
+            mulmod(M, 
+                addmod(S, P - nx, P),
+                P),
+            P - mulmod(ysq,
+                mulmod(8, ysq, P),
+                P),
+            P);
+        uint nz = mulmod(
+            mulmod(2, _ay, P),
+            _az,
+            P);
+            
         return (nx, ny, nz);
     }
 
-    function jadd(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint) {
+    /*function jadd(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint) {
 
         if(_ay == 0) return(_bx, _by, _bz);
         if(_by == 0) return(_ax, _ay, _az);
-
+        
         uint u1 = (_ax * _bz * _bz) % P;
         uint u2 = (_bx * _az * _az) % P;
-        uint s1 = (_ay * _bz * _bz * _bz) % P;
-        uint s2 = (_by * _az * _az * _az) % P;
+        _bx = (_ay * _bz * _bz * _bz) % P;
+        _by = (_by * _az * _az * _az) % P;
 
+        //u1 == u2
         if(u1 == u2) {
-           if(s1 != s2) return(0, 0, 1);
+           //s1 != s2
+           if(_bx != _by) return(0, 0, 1);
            return jdouble(_ax, _ay, _az);
         }
         
-        //H
-        _ax = u2 - u1;
-        //R
-        _ay = s2 - s1;
-        //H2
-        _bx = (_ax * _ax) % P;
-        //H3
-        _by = (_ax * _bx) % P;
-        //U1H2
-        u1 = (u1 * _bx) % P;
-        //nx
-        u2 = (_ay * _ay - _by - 2 * u1) % P;
-        //ny
-        s1 = (_ay * (u1 - u2) - s1 * _by) % P;
-        //nz
-        s2 = (_ax * _az * _bz) % P;
-
-        return (u2, s1, s2);
+        uint nx = ((_by - _bx) * (_by - _bx) - (u2 - u1) * (u2 - u1) * (u2 - u1) - 2 * u1 * (u2 - u1) * (u2 - u1)) % P;
+        
+        return (
+            nx,
+            ((_by - _bx) * (u1 * (u2 - u1) * (u2 - u1) - nx) - _bx * (u2 - u1) * (u2 - u1) * (u2 - u1)) % P,
+            ((u2 - u1) * _az * _bz) % P);
     }
 
     function jmul(uint _bx, uint _by, uint _bz, uint _n) constant returns (uint, uint, uint) {
@@ -145,7 +160,7 @@ contract ArithLib {
             if(addmod(xcubed, 7, P) == mulmod(y, y, P)) return(x, y);
             x = ((x + 1) % P);
         }
-    }
+    }*/
     
     function () {
         throw;
