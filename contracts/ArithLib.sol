@@ -2,8 +2,8 @@
 
 /* Deployment:
 Owner: 0xeb5fa6cbf2aca03a0df228f2df67229e2d3bd01e
-Last address: 0xc75175d7de7e8036f7c00a8e89f30dcf6e733f2e
-ABI: [{"constant":true,"inputs":[{"name":"_ax","type":"uint256"},{"name":"_ay","type":"uint256"},{"name":"_az","type":"uint256"},{"name":"_bx","type":"uint256"},{"name":"_by","type":"uint256"},{"name":"_bz","type":"uint256"}],"name":"jadd","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_pub1","type":"uint256"},{"name":"_pub2","type":"uint256"}],"name":"hash_pubkey_to_pubkey","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_x","type":"uint256"},{"name":"_y_bit","type":"uint256"}],"name":"jrecover_y","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_q0","type":"uint256"},{"name":"_q1","type":"uint256"},{"name":"_q2","type":"uint256"}],"name":"jdecompose","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_ax","type":"uint256"},{"name":"_ay","type":"uint256"},{"name":"_az","type":"uint256"}],"name":"jdouble","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_data","type":"uint256"},{"name":"_bit","type":"uint256"}],"name":"isbit","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_b","type":"uint256"},{"name":"_e","type":"uint256"},{"name":"_m","type":"uint256"}],"name":"jexp","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_bx","type":"uint256"},{"name":"_by","type":"uint256"},{"name":"_bz","type":"uint256"},{"name":"_n","type":"uint256"}],"name":"jmul","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"type":"constructor"},{"payable":false,"type":"fallback"}]
+Last address: TBD
+ABI: [{"constant":true,"inputs":[{"name":"_ax","type":"uint256"},{"name":"_ay","type":"uint256"},{"name":"_az","type":"uint256"},{"name":"_bx","type":"uint256"},{"name":"_by","type":"uint256"},{"name":"_bz","type":"uint256"}],"name":"jadd","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_pub1","type":"uint256"},{"name":"_pub2","type":"uint256"}],"name":"hash_pubkey_to_pubkey","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_x","type":"uint256"},{"name":"_y_bit","type":"uint256"}],"name":"jrecover_y","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_q0","type":"uint256"},{"name":"_q1","type":"uint256"},{"name":"_q2","type":"uint256"}],"name":"jdecompose","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_ax","type":"uint256"},{"name":"_ay","type":"uint256"},{"name":"_az","type":"uint256"},{"name":"_bx","type":"uint256"},{"name":"_by","type":"uint256"},{"name":"_bz","type":"uint256"}],"name":"jsub","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_ax","type":"uint256"},{"name":"_ay","type":"uint256"},{"name":"_az","type":"uint256"}],"name":"jdouble","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_data","type":"uint256"},{"name":"_bit","type":"uint256"}],"name":"isbit","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_b","type":"uint256"},{"name":"_e","type":"uint256"},{"name":"_m","type":"uint256"}],"name":"jexp","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_bx","type":"uint256"},{"name":"_by","type":"uint256"},{"name":"_bz","type":"uint256"},{"name":"_n","type":"uint256"}],"name":"jmul","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"jtest","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"type":"constructor"},{"payable":false,"type":"fallback"}]
 Optimized: yes
 Solidity version: v0.4.4
 */
@@ -21,7 +21,7 @@ contract ArithLib {
     function ArithLib() { }
     
     function jtest() constant returns (uint) {
-        
+
         return(0);
     }
 
@@ -58,29 +58,58 @@ contract ArithLib {
         return (nx, ny, nz);
     }
 
-    /*function jadd(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint) {
+    function jadd(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint) {
 
         if(_ay == 0) return(_bx, _by, _bz);
         if(_by == 0) return(_ax, _ay, _az);
         
-        uint u1 = (_ax * _bz * _bz) % P;
-        uint u2 = (_bx * _az * _az) % P;
-        _bx = (_ay * _bz * _bz * _bz) % P;
-        _by = (_by * _az * _az * _az) % P;
-
-        //u1 == u2
+        uint u1 = mulmod(_ax, _bz, P);
+        u1 = mulmod(u1, _bz, P);
+        
+        uint u2 = mulmod(_bx, _az, P);
+        u2 = mulmod(u2, _az, P);
+        
+        _bx = mulmod(_ay, _bz, P);
+        _bx = mulmod(_bx, _bz, P);
+        _bx = mulmod(_bx, _bz, P);
+        
+        _by = mulmod(_by, _az, P);
+        _by = mulmod(_by, _az, P);
+        _by = mulmod(_by, _az, P);
+        
         if(u1 == u2) {
            //s1 != s2
            if(_bx != _by) return(0, 0, 1);
            return jdouble(_ax, _ay, _az);
         }
         
-        uint nx = ((_by - _bx) * (_by - _bx) - (u2 - u1) * (u2 - u1) * (u2 - u1) - 2 * u1 * (u2 - u1) * (u2 - u1)) % P;
+        _az = mulmod(_az, _bz, P);
+        _bz = addmod(u2, P - u1, P);
+        _az = mulmod(_az, _bz, P);
+        //_az contains nz
+        //_bz contains h1
+
+        uint h2 = mulmod(_bz, _bz, P);
+        uint h3 = mulmod(_bz, h2, P);
+        uint u1h2 = mulmod(u1, h2, P);
+        _bz = addmod(_by, P - _bx, P);
+        //_bz contains r
         
-        return (
-            nx,
-            ((_by - _bx) * (u1 * (u2 - u1) * (u2 - u1) - nx) - _bx * (u2 - u1) * (u2 - u1) * (u2 - u1)) % P,
-            ((u2 - u1) * _az * _bz) % P);
+        _ax = mulmod(_bz, _bz, P);
+        _ay = mulmod(2, u1h2, P);
+        _ax = addmod(_ax, P - h3, P);
+        _ax = addmod(_ax, P - _ay, P);
+        
+        _ay = addmod(u1h2, P - _ax, P);
+        _ay = mulmod(_ay, _bz, P);
+        h2 = mulmod(_bx, h3, P);
+        _ay = addmod(_ay, P - h2, P);
+        
+        return(_ax, _ay, _az);
+    }
+    
+    function jsub(uint _ax, uint _ay, uint _az, uint _bx, uint _by, uint _bz) constant returns (uint, uint, uint) {
+        return jadd(_ax, _ay, _az, _bx, P - _by, _bz);
     }
 
     function jmul(uint _bx, uint _by, uint _bz, uint _n) constant returns (uint, uint, uint) {
@@ -160,7 +189,7 @@ contract ArithLib {
             if(addmod(xcubed, 7, P) == mulmod(y, y, P)) return(x, y);
             x = ((x + 1) % P);
         }
-    }*/
+    }
     
     function () {
         throw;
