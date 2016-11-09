@@ -132,17 +132,21 @@ contract Laundromat {
             pubkeys1[withdraw.step % participants],
             pubkeys2[withdraw.step % participants], 1,
             withdraw.ring2[withdraw.prevStep % participants]);
-        //subtract
-        (k1x, k1y, k1z) = arithContract.jadd(k1x, k1y, k1z, k2x, P - k2y, k2z);
+        //ksub1
+        (k1x, k1y, k1z) = arithContract.jsub(k1x, k1y, k1z, k2x, k2y, k2z);
         (pub1x, pub1y) = arithContract.jdecompose(k1x, k1y, k1z);
-        (k1x, k1y) = arithContract.hash_pubkey_to_pubkey(pubkeys1[withdraw.step % participants],
+        //k3
+        (k1x, k1y) = arithContract.hash_pubkey_to_pubkey(
+            pubkeys1[withdraw.step % participants],
             pubkeys2[withdraw.step % participants]);
+        //k4 = ecmul(k3, s[prev_i])
         (k1x, k1y, k1z) = arithContract.jmul(k1x, k1y, 1,
             withdraw.signature[withdraw.prevStep % participants]);
+        //k5 = ecmul(I, e[prev_i].right)
         (k2x, k2y, k2z) = arithContract.jmul(withdraw.Ix, withdraw.Iy, 1,
             withdraw.ring2[withdraw.prevStep % participants]);
-        //subtract
-        (k1x, k1y, k1z) = arithContract.jadd(k1x, k1y, k1z, k2x, P - k2y, k2z);
+        //ksub2
+        (k1x, k1y, k1z) = arithContract.jsub(k1x, k1y, k1z, k2x, k2y, k2z);
         //pub2x, pub2y
         (k1x, k1y) = arithContract.jdecompose(k1x, k1y, k1z);
         withdraw.ring1.push(uint(sha3([uint(withdraw.sender), pub1x, pub1y, k1x, k1y])));
