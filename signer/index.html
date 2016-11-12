@@ -6,67 +6,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
 
-  <title>ETH</title>
+  <title>Laundromat</title>
 
 </head>
 
 <script>
 
-function init() {
- 
-}
-
-function deposit() {
+function statusCallback(data) {
 
   var web3 = new Web3();
-  var paymentEth = '0.01';
-  var privateKey = '1234567890';
-  var myAddress = '0xEb5FA6CBf2aCA03a0dF228f2DF67229E2D3BD01e';
 
-  var pubkey = getPublicKey(privateKey);
-  var payment = web3.toBigNumber(web3.toWei(paymentEth, "ether")).toString(16);
-
-  ///TODO: get Laundromat status: amount of participants, payment
-    
-  //now pay payment to Laundromat contract
-  //call(Laundromat).deposit(pubkey).value(100 wei);
-  console.log("Deposit ready!");
-}
-
-function withdraw() {
-
-  var privateKey = '12345';
-  var myAddress = '0xEb5FA6CBf2aCA03a0dF228f2DF67229E2D3BD01e';
-  var pubkeys = [
-    ['107303582290733097924842193972465022053148211775194373671539518313500194639752',
-     '103795966108782717446806684023742168462365449272639790795591544606836007446638'],
-
-    ['92883563547733953747193399241467975295201508608352798513009429659680796014075',
-     '114610965210433134803810343179237635280663098111701848326472592228175073260197']
-  ];
-
-  var participants = pubkeys.length;
-  var result = signring(privateKey, myAddress, pubkeys);
-
-  //now call Laundromat contract
-    
-  //call(Laundromat).withdrawStart(signature, x0, Ix, Iy);
-  console.log("Withdraw start");
-
-  for(var i = 0; i < participants; i++) {
-
-    //call(Laundromat).withdrawStep();
-    console.log("Withdraw step " + i);
-  }
-
-  //call(Laundromat).withdrawFinal();
-  console.log("Withdraw ready!");
+  console.log(data.participants);
+  document.getElementById('participants').value = data.participants;
+  document.getElementById('gotParticipants').value = data.gotParticipants;
+  document.getElementById('payment').value = web3.fromWei(data.payment, 'ether');
 }
 </script>  
 
-<body class="full-width"  onload="withdraw();">
+<body class="full-width">
 
   <section id="container" class="">
+
+    <div>
+    <form>Query status:
+      <div>
+        <label>Address: <input type="text" name="address" id="address"></label>
+        <input type="button" name="Status" value="Status" onclick="getStatus(document.getElementById('address').value, statusCallback)">
+      </div>
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Status:
+      <div>
+        <label>Participants limit: <input type="text" name="participants" id="participants"></label>
+      </div>
+      <div>
+        <label>Got participants: <input type="text" name="gotParticipants" id="gotParticipants"></label>
+      </div>
+      <div>
+        <label>Payment (ETH): <input type="text" name="payment" id="payment"></label>
+      </div>
+    </form>
+    </div>
 
   </section>
   <!--main content end-->
@@ -76,6 +59,7 @@ function withdraw() {
   <script type="text/javascript" src="sha3.js"></script>
   <script type="text/javascript" src="jsbn.js"></script>
   <script type="text/javascript" src="signer.js"></script>
+  <script type="text/javascript" src="laundromat.js"></script>
 
 </body>
 </html>
