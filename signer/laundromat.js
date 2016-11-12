@@ -63,7 +63,7 @@ function deposit(address, myaddress, privateKey, callback) {
     try {
 
       var txhash = laundromatContractInstance.deposit(pubkey[0], pubkey[1],
-        {from: myaddress, gas: 100000, value: paymentWei});
+        {from: myaddress, gas: 200000, value: paymentWei});
 
       callback({result: 'ok', txhash: txhash});
       return;

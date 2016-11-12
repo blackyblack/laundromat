@@ -21,6 +21,22 @@ function statusCallback(data) {
   document.getElementById('gotParticipants').value = data.gotParticipants;
   document.getElementById('payment').value = web3.fromWei(data.payment, 'ether');
 }
+
+function generatePrivate() {
+
+  var key = random_key();
+  document.getElementById('privateResult').value = key.toString();
+}
+
+function depositCallback(data) {
+
+  if(data.result == 'ok') {
+     document.getElementById('depositLabel').innerHTML = 'Success';
+     return;
+  }
+
+  document.getElementById('depositLabel').innerHTML = 'Error: ' + data.error;
+}
 </script>  
 
 <body class="full-width">
@@ -30,7 +46,7 @@ function statusCallback(data) {
     <div>
     <form>Query status:
       <div>
-        <label>Address: <input type="text" name="address" id="address"></label>
+        <label>Contract address: <input type="text" name="address" id="address"></label>
         <input type="button" name="Status" value="Status" onclick="getStatus(document.getElementById('address').value, statusCallback)">
       </div>
     </form>
@@ -40,14 +56,47 @@ function statusCallback(data) {
     <div>
     <form>Status:
       <div>
-        <label>Participants limit: <input type="text" name="participants" id="participants"></label>
+        <label>Participants limit: <input readonly type="text" name="participants" id="participants"></label>
       </div>
       <div>
-        <label>Got participants: <input type="text" name="gotParticipants" id="gotParticipants"></label>
+        <label>Got participants: <input readonly type="text" name="gotParticipants" id="gotParticipants"></label>
       </div>
       <div>
-        <label>Payment (ETH): <input type="text" name="payment" id="payment"></label>
+        <label>Payment (ETH): <input readonly type="text" name="payment" id="payment"></label>
       </div>
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>
+      <div>
+        <label>Private key: <input readonly type="text" name="privateResult" id="privateResult"></label>
+        <input type="button" name="Generate" value="Generate" onclick="generatePrivate()">
+      </div>
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Deposit:
+      <div>
+        <label>To contract: <input type="text" name="address2" id="address2"></label>
+      </div>
+      <div>
+        <label>My address: <input type="text" name="myaddress" id="myaddress"></label>
+      </div>
+      <div>
+        <label>Private key: <input type="text" name="privatekey" id="privatekey"></label>
+        <input type="button" name="Deposit" value="Deposit" onclick="deposit(document.getElementById('address2').value,document.getElementById('myaddress').value, document.getElementById('privatekey').value, depositCallback)">
+      </div>
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Status:
+      <label id="depositLabel">None</label>
     </form>
     </div>
 
