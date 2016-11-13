@@ -77,12 +77,12 @@ function withdrawStart() {
   withdraw(document.getElementById('address3').value,document.getElementById('myaddress2').value, document.getElementById('privatekey2').value, withdrawCallback);
 }
 
-function withdrawStep() {
+function withdrawStepStart() {
   document.getElementById('withdrawLabel').innerHTML = 'Pending';
   withdrawStep(document.getElementById('address3').value,document.getElementById('myaddress2').value, withdrawStepCallback);
 }
 
-function withdrawFinal() {
+function withdrawFinalStart() {
   document.getElementById('withdrawLabel').innerHTML = 'Pending';
   withdrawFinal(document.getElementById('address3').value,document.getElementById('myaddress2').value, withdrawFinalCallback);
 }
@@ -224,8 +224,8 @@ function withdrawFinalCallback(data) {
         <label>Private key: <input type="text" name="privatekey2" id="privatekey2"></label>
       </div>
       <input type="button" name="Withdraw" value="Withdraw" onclick="withdrawStart()">
-      <input type="button" name="WithdrawStep" value="Withdraw Step" onclick="withdrawStep()">
-      <input type="button" name="WithdrawFinal" value="Withdraw Finalize" onclick="withdrawFinal()">
+      <input type="button" name="WithdrawStep" value="Withdraw Step" onclick="withdrawStepStart()">
+      <input type="button" name="WithdrawFinal" value="Withdraw Finalize" onclick="withdrawFinalStart()">
     </form>
     </div>
 

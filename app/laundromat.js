@@ -157,7 +157,7 @@ function withdraw(address, myaddress, privateKey, callback) {
     }
 
     //make signature
-    var result = signring(privateKey, myAddress, pubkeys);
+    var result = signring(privateKey, myaddress, pubkeys);
     if(result.result != 'ok') {
 
       callback(result);
