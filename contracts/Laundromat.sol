@@ -1,3 +1,19 @@
+/* 
+ * Copyright © 2016 Andrew "blackyblack" Lekar.
+ * 
+ * See the AUTHORS.txt and LICENSE.txt files at the top-level directory of
+ * this distribution for the individual copyright holder information and the
+ * developer policies on copyright and licensing.
+ * 
+ * Unless otherwise agreed in a custom licensing agreement, no part of the
+ * software, including this file, may be copied, modified, propagated,
+ * or distributed except according to the terms contained in the LICENSE.txt
+ * file.
+ * 
+ * Removal or modification of this copyright notice is prohibited.
+ *
+*/
+
 /* Deployment:
 Owner: 0xeb5fa6cbf2aca03a0df228f2df67229e2d3bd01e
 Last address: 0x401e28717a6a35a50938bc7f290f2678fc0a2816
