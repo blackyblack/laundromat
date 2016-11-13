@@ -181,11 +181,11 @@ function withdraw(address, myaddress, privateKey, callback) {
 
       for(var i = 0; i < participants; i++) {
 
-        txhash = laundromatContractInstance.withdrawStep({from: myaddress, gas: 1500000});
+        txhash = laundromatContractInstance.withdrawStep({from: myaddress, gas: 1700000});
         console.log("Withdraw step " + i);
       }
 
-      txhash = laundromatContractInstance.withdrawFinal({from: myaddress, gas: 1500000});
+      txhash = laundromatContractInstance.withdrawFinal({from: myaddress, gas: 1700000});
 
       callback({result: 'ok', txhash: txhash});
       return;
