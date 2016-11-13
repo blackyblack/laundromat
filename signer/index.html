@@ -16,7 +16,13 @@ function statusCallback(data) {
 
   var web3 = new Web3();
 
+  if(data.result != 'ok') {
+    document.getElementById('queryStatusLabel').innerHTML = 'Status: Error. ' + data.error;
+    return;
+  }
+
   console.log(data.participants);
+  document.getElementById('queryStatusLabel').innerHTML = 'Status: Success';
   document.getElementById('participants').value = data.participants;
   document.getElementById('gotParticipants').value = data.gotParticipants;
   document.getElementById('payment').value = web3.fromWei(data.payment, 'ether');
@@ -26,6 +32,29 @@ function generatePrivate() {
 
   var key = random_key();
   document.getElementById('privateResult').value = key.toString();
+}
+
+function createStart() {
+
+  var web3 = new Web3();
+
+  document.getElementById('createLabel').innerHTML = 'Pending';
+  document.getElementById('address4').value = '';
+
+  var payment = web3.toWei(document.getElementById('payment4').value, 'ether');
+
+  create(document.getElementById('myaddress4').value, document.getElementById('participants4').value, payment, createCallback);
+}
+
+function createCallback(data) {
+
+  if(data.result == 'ok') {
+     document.getElementById('createLabel').innerHTML = 'Success';
+     document.getElementById('address4').value = data.address;
+     return;
+  }
+
+  document.getElementById('createLabel').innerHTML = 'Error: ' + data.error;
 }
 
 function depositStart() {
@@ -94,6 +123,16 @@ function withdrawFinalCallback(data) {
   <section id="container" class="">
 
     <div>
+    <form>
+      <div>
+        <label>Private key: <input readonly type="text" name="privateResult" id="privateResult"></label>
+        <input type="button" name="Generate" value="Generate" onclick="generatePrivate()">
+      </div>
+    </form>
+    </div>
+
+    <hr>
+    <div>
     <form>Query status:
       <div>
         <label>Contract address: <input type="text" name="address" id="address"></label>
@@ -104,7 +143,10 @@ function withdrawFinalCallback(data) {
 
     <hr>
     <div>
-    <form>Status:
+    <form>
+      <div>
+        <label id="queryStatusLabel">Status: None</label>
+      </div>
       <div>
         <label>Participants limit: <input readonly type="text" name="participants" id="participants"></label>
       </div>
@@ -119,10 +161,26 @@ function withdrawFinalCallback(data) {
 
     <hr>
     <div>
-    <form>
+    <form>New Laundromat:
       <div>
-        <label>Private key: <input readonly type="text" name="privateResult" id="privateResult"></label>
-        <input type="button" name="Generate" value="Generate" onclick="generatePrivate()">
+        <label>My address: <input type="text" name="myaddress4" id="myaddress4"></label>
+      </div>
+      <div>
+        <label>Participants: <input type="text" name="participants4" id="participants4"></label>
+      </div>
+      <div>
+        <label>Payment (ETH): <input type="text" name="payment4" id="payment4"></label>
+      </div>
+      <input type="button" name="Create" value="Create" onclick="createStart()">
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Status:
+      <label id="createLabel">None</label>
+      <div>
+        <label>Address: <input readonly type="text" name="address4" id="address4"></label>
       </div>
     </form>
     </div>
