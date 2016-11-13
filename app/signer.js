@@ -240,9 +240,13 @@ function random_key() {
   return (new BigInteger(ba)).remainder(N).add(N).remainder(N);
 }
 
+function createBigInteger(value) {
+  return new BigInteger(web3.toBigNumber(value).toFixed());
+}
+
 function getPublicKey(privateKey) {
 
-  var privkey = new BigInteger(privateKey);
+  var privkey = createBigInteger(privateKey);
   var jpubkey = jacobian_multiply([Gx, Gy, BigInteger.ONE], privkey);
   var mypubkey = jdecompose(jpubkey);
   return [mypubkey[0].toString(), mypubkey[1].toString()];
@@ -250,20 +254,22 @@ function getPublicKey(privateKey) {
 
 function signring(privateKey, myaddress, publicKeys) {
  
-  var privkey = new BigInteger(privateKey);
+  var privkey = createBigInteger(privateKey);
   var myindex = -1;
   var pubkeys = [];
   var participants = 0;
 
   var jpubkey = jacobian_multiply([Gx, Gy, BigInteger.ONE], privkey);
   var mypubkey = jdecompose(jpubkey);
+  console.log("My public key: " + mypubkey.toString());
 
   participants = publicKeys.length;
   for(var i = 0; i < participants; i++) {
 
-    var pubx = new BigInteger(publicKeys[i][0]);
-    var puby = new BigInteger(publicKeys[i][1]);
+    var pubx = createBigInteger(publicKeys[i][0]);
+    var puby = createBigInteger(publicKeys[i][1]);
     pubkeys.push([pubx, puby]);
+    console.log("Participant public key: " + [pubx, puby].toString());
 
     if(mypubkey[0].equals(pubx) && mypubkey[1].equals(puby)) {
 
@@ -276,7 +282,7 @@ function signring(privateKey, myaddress, publicKeys) {
     return {result: 'error', error: 'Not found myself in participants'};
   }
 
-  var msghash = new BigInteger(myaddress);
+  var msghash = createBigInteger(myaddress);
 
   //I = multiply(hash_to_pubkey(my_pub), mypriv)
   var I = jdecompose(jacobian_multiply(to_jacobian(hash_to_pubkey(mypubkey)), privkey));
@@ -374,4 +380,80 @@ function signring(privateKey, myaddress, publicKeys) {
   }
 
   return {result: 'ok', ix: I[0].toString(), iy: I[1].toString(), x0: e[0][0].toString(), signature: signStr};
+}
+
+function verifyring(signature, x0, Ix, Iy, myaddress, publicKeys) {
+ 
+  var pubkeys = [];
+  var participants = 0;
+
+  participants = publicKeys.length;
+  for(var i = 0; i < participants; i++) {
+
+    var pubx = createBigInteger(publicKeys[i][0]);
+    var puby = createBigInteger(publicKeys[i][1]);
+    pubkeys.push([pubx, puby]);
+  }
+
+  var s = []
+  for(var i = 0; i < participants; i++) {
+
+    s.push(createBigInteger(signature[i]));
+  }
+
+  var I = [createBigInteger(Ix), createBigInteger(Iy)];
+
+  var msghash = createBigInteger(myaddress);
+
+  //empty ring
+  var e = [];
+
+  var left = web3.toBigNumber(x0);
+  var right = sha3([left]);
+  e.push([new BigInteger('' + left.toFixed()), new BigInteger('' + right.toFixed())]);
+
+  var i = 1;
+
+  while(i < (participants + 1)) {
+
+    var prev_i = (i - 1) % participants;
+
+    var kmulpub1 = jacobian_multiply([Gx, Gy, BigInteger.ONE], s[prev_i]);
+    var jmul1 = jacobian_multiply(to_jacobian(pubkeys[i % participants]), e[prev_i][1]);
+    jmul1[1] = P.subtract(jmul1[1]);
+
+    var pub1 = jdecompose(jacobian_add(kmulpub1, jmul1));
+
+    var kmulpub2 = jacobian_multiply(to_jacobian(hash_to_pubkey(pubkeys[i % participants])), s[prev_i]);
+    var Imul1 = jacobian_multiply(to_jacobian(I), e[prev_i][1]);
+    Imul1[1] = P.subtract(Imul1[1]);
+
+    var pub2 = jdecompose(jacobian_add(kmulpub2, Imul1));
+
+    //hash together [msghash, kpub[0], kpub[1], kmulpub[0], kmulpub[1]]
+    left = sha3([
+      web3.toBigNumber(msghash.toString()),
+      web3.toBigNumber(pub1[0].toString()),
+      web3.toBigNumber(pub1[1].toString()),
+      web3.toBigNumber(pub2[0].toString()),
+      web3.toBigNumber(pub2[1].toString())]);
+
+    right = sha3([left]);
+
+    e[i] = [
+      new BigInteger('' + left.toFixed()),
+      new BigInteger('' + right.toFixed())];
+
+    i++;
+  }
+
+  if(!e[participants][0].equals(e[0][0])) {
+    return {result: 'error', error: 'Signature failed'};
+  }
+
+  if(!e[participants][1].equals(e[0][1])) {
+    return {result: 'error', error: 'Signature failed'};
+  }
+
+  return {result: 'ok'};
 }

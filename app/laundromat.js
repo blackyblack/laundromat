@@ -164,6 +164,10 @@ function withdraw(address, myaddress, privateKey, callback) {
       return;
     }
 
+    console.log('Signature: ' + result.signature.toString());
+    console.log('x0: ' + result.x0.toString());
+    console.log('I: ' + [result.ix, result.iy].toString());
+
     //start withdraw
     var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     var laundromatContract = web3.eth.contract(laundromatContractAbi);

@@ -34,6 +34,34 @@ function generatePrivate() {
   document.getElementById('privateResult').value = key.toString();
 }
 
+function verifyTest() {
+
+  var privateKey = '24883375667666319798130594789127643442423595702572623965227685575198986951784';
+  var myaddress = '0x4460f4c8edBcA96f9dB17ef95AAF329eDdaeac29';
+  var publicKeys = [
+    ['23503456097056075834787824699565082974248719863748670453930416475016722867598',
+     '12029010276117245204134325384098229702769917839541508121640700015551410501619'],
+    ['52043104733337935592382440027801835398034545360665484397010150219950554448238',
+     '85487817269951599375113881092901317364959242010982485618000922284759361444548']
+  ];
+
+  /*var result = signring(privateKey, myaddress, publicKeys);
+  console.log(result);*/
+
+  var signature = [
+    '0x9ba0731eca3bb08e251e517c3664671bb8f66d279cd65f3ea62b5f6b7770c905',
+    '0x7f9e53ec283c479ac6eed885029229649f1b401f9019180b140e77bae81987fe'];
+  var x0 = '0xa48345eb75f09f478a431171c459f61d30b178b21471a396a0cc7e890bb51599';
+  var Ix = '0xce0c7877a8ba5e8c8d9c12e67bc55ed09a19b0f8d99f151f3a1c15311e6ba322';
+  var Iy = '0x8bf173807d1b680f22e33c80dd1fec7125a6f4601e4a8584c83f0b3fd77f0753';
+  /*var signature = result.signature;
+  var x0 = result.x0;
+  var Ix = result.ix;
+  var Iy = result.iy; */
+  var result = verifyring(signature, x0, Ix, Iy, myaddress, publicKeys);
+  console.log(result);
+}
+
 function createStart() {
 
   var web3 = new Web3();
