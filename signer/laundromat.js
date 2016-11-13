@@ -134,3 +134,45 @@ function withdraw(address, myaddress, privateKey, callback) {
     }
   });
 }
+
+function withdrawStep(address, myaddress, callback) {
+
+  //start withdraw
+  var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  var laundromatContract = web3.eth.contract(laundromatContractAbi);
+  var laundromatContractInstance = laundromatContract.at(address);
+
+  try {
+
+    var txhash = laundromatContractInstance.withdrawStep({from: myaddress, gas: 1500000});
+    console.log("Withdraw step");
+    callback({result: 'ok', txhash: txhash});
+    return;
+  } catch (err) {
+
+    console.log("error: " + err.message);
+    callback({result: 'error', error: err.message});
+    return;
+  }
+}
+
+function withdrawFinal(address, myaddress, callback) {
+
+  //start withdraw
+  var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  var laundromatContract = web3.eth.contract(laundromatContractAbi);
+  var laundromatContractInstance = laundromatContract.at(address);
+
+  try {
+
+    var txhash = laundromatContractInstance.withdrawFinal({from: myaddress, gas: 1500000});
+    console.log("Withdraw final");
+    callback({result: 'ok', txhash: txhash});
+    return;
+  } catch (err) {
+
+    console.log("error: " + err.message);
+    callback({result: 'error', error: err.message});
+    return;
+  }
+}

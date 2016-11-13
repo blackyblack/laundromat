@@ -28,6 +28,11 @@ function generatePrivate() {
   document.getElementById('privateResult').value = key.toString();
 }
 
+function depositStart() {
+  document.getElementById('depositLabel').innerHTML = 'Pending';
+  deposit(document.getElementById('address2').value,document.getElementById('myaddress').value, document.getElementById('privatekey').value, depositCallback);
+}
+
 function depositCallback(data) {
 
   if(data.result == 'ok') {
@@ -36,6 +41,51 @@ function depositCallback(data) {
   }
 
   document.getElementById('depositLabel').innerHTML = 'Error: ' + data.error;
+}
+
+function withdrawStart() {
+  document.getElementById('withdrawLabel').innerHTML = 'Pending';
+  withdraw(document.getElementById('address3').value,document.getElementById('myaddress2').value, document.getElementById('privatekey2').value, withdrawCallback);
+}
+
+function withdrawStep() {
+  document.getElementById('withdrawLabel').innerHTML = 'Pending';
+  withdrawStep(document.getElementById('address3').value,document.getElementById('myaddress2').value, withdrawStepCallback);
+}
+
+function withdrawFinal() {
+  document.getElementById('withdrawLabel').innerHTML = 'Pending';
+  withdrawFinal(document.getElementById('address3').value,document.getElementById('myaddress2').value, withdrawFinalCallback);
+}
+
+function withdrawCallback(data) {
+
+  if(data.result == 'ok') {
+     document.getElementById('withdrawLabel').innerHTML = 'Success';
+     return;
+  }
+
+  document.getElementById('withdrawLabel').innerHTML = 'Error: ' + data.error;
+}
+
+function withdrawStepCallback(data) {
+
+  if(data.result == 'ok') {
+     document.getElementById('withdrawLabel').innerHTML = 'Success';
+     return;
+  }
+
+  document.getElementById('withdrawLabel').innerHTML = 'Error: ' + data.error;
+}
+
+function withdrawFinalCallback(data) {
+
+  if(data.result == 'ok') {
+     document.getElementById('withdrawLabel').innerHTML = 'Success';
+     return;
+  }
+
+  document.getElementById('withdrawLabel').innerHTML = 'Error: ' + data.error;
 }
 </script>  
 
@@ -88,8 +138,8 @@ function depositCallback(data) {
       </div>
       <div>
         <label>Private key: <input type="text" name="privatekey" id="privatekey"></label>
-        <input type="button" name="Deposit" value="Deposit" onclick="deposit(document.getElementById('address2').value,document.getElementById('myaddress').value, document.getElementById('privatekey').value, depositCallback)">
       </div>
+      <input type="button" name="Deposit" value="Deposit" onclick="depositStart()">
     </form>
     </div>
 
@@ -97,6 +147,31 @@ function depositCallback(data) {
     <div>
     <form>Status:
       <label id="depositLabel">None</label>
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Withdraw:
+      <div>
+        <label>From contract: <input type="text" name="address3" id="address3"></label>
+      </div>
+      <div>
+        <label>My address: <input type="text" name="myaddress2" id="myaddress2"></label>
+      </div>
+      <div>
+        <label>Private key: <input type="text" name="privatekey2" id="privatekey2"></label>
+      </div>
+      <input type="button" name="Withdraw" value="Withdraw" onclick="withdrawStart()">
+      <input type="button" name="WithdrawStep" value="Withdraw Step" onclick="withdrawStep()">
+      <input type="button" name="WithdrawFinal" value="Withdraw Finalize" onclick="withdrawFinal()">
+    </form>
+    </div>
+
+    <hr>
+    <div>
+    <form>Status:
+      <label id="withdrawLabel">None</label>
     </form>
     </div>
 
