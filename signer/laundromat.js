@@ -79,7 +79,7 @@ function create(myaddress, participants, payment, callback) {
           return;
         }
 
-        callback({result: 'error', error: 'Contract address not ready'});
+        //callback({result: 'error', error: 'Contract address not ready'});
         return;
       }
     );
