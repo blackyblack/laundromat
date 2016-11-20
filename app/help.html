@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <title>Laundromat</title>
+  
+<!-- Bootstrap, via a CDN -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Superhero Bootstrap theme -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css" rel="stylesheet" integrity="sha384-Xqcy5ttufkC3rBa8EdiAyA1VgOGrmel2Y+wxm4K3kI3fcjTWlDWrlnxyD6hOi3PF" crossorigin="anonymous">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- End Bootstrap -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+	
+	  <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Laundromat</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="new.html">New</a></li>
+            <li><a href="withdraw.html">Withdraw</a></li>
+            <li class="active"><a href="#">Help</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+  <div class=" container">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <h1>Help</h1>
+      <p>Instructions on how to use Laundromat</p>
+    </div>
+    
+    
+    
+    
+		<div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">Start geth</h3>
+	  </div>
+    
+    <div class="panel-body">
+	    <p>Run your local geth node with RPC enabled for your localhost: 
+		    
+		    <pre>geth.exe --rpc --rpcport "8545" --rpcaddr="localhost" --rpccorsdomain "*" 
+		    </pre>
+		  Make sure it is only accessible from your local network!  
+		  </p>
+    </div>
+		</div>
+
+		<div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">Launch Laundromat</h3>
+	  </div>
+    
+    <div class="panel-body">
+	    <p>Open app/index.html to access the Laundromat UI.</p>
+    </div>
+		</div>
+
+		<div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">Check Contract Status</h3>
+	  </div>
+    
+    <div class="panel-body">
+	    <p>On the Main tab, enter a mixing contract address into the Check Contract Status section, and click the "Check Status" button. </p>
+	    
+	    <p>If there are spaces available in the contract (if the Number of Participants is lower than the Participant Limit), you may join this contract. If you join this contract, the "Payment (ETH)" is the amount of Ether that will be deducted from your account for mixing.</p>
+    </div>
+		</div>
+
+		<div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">Join the Mixing Contract</h3>
+	  </div>
+    
+    <div class="panel-body">
+	    <p>To join the mixing contract, first generate a Private Key. This key will allow you to withdraw your Ether after mixing. Write this number down! If you lose this number, you will lose your ether!</p>
+	    
+	    <p>Unlock your Ethereum account. You may unlock your account on the command line using these commands:</p>
+	    <pre>geth attach</pre>
+	    Then:
+	    
+		  <pre>personal.unlockAccount('your_account',"your_password")</pre>
+		  For example:
+		  
+		  <pre>personal.unlockAccount('0x401e28717a6a35a50938bc7f290f2678fc0a2816',"password")</pre>
+	    
+	    <p>Once your account is unlocked, enter the contract address in the Contract Status section, and click the "Join Contract" button.</p>
+	    
+    </div>
+		</div>
+
+		<div class="panel panel-primary">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">Withdraw Your Ether</h3>
+	  </div>
+    
+    <div class="panel-body">
+	    <p>When all participants are in you can withdraw your Ether. You can check the contract status on the Main tab. When the Number of Participants is equal to the Partipcipant Limit, you can withdraw.</p>
+	    
+	    <p>Generate a new Ethereum account:
+		  <pre>geth account new</pre> 
+		  and top up it with small amount of Ether (up to 0.01 Ether). Make sure this account is not related to your primary account in any way. </p>
+		  <p>On the Withdraw tab, enter the mixing contract number in the Contract section, enter your new Ethereum account address in the My Address section, and enter your Private Key in the Private Key section.</p>
+		  <p>Click the "Withdraw" button.</p>
+		  <p>The withdrawal process can take some time and a large amount of gas. The withdrawal process requires 1 transaction to start the withdrawal, 1 transaction for each participant, and 1 transaction to finish the withdrawal.</p>
+					<p>If the withdrawal is stuck at some point you can check block explorer to see how many steps left and click "Withdraw Step" button to advance the withdrawal.</p>
+					<p>If all steps are complete but the Finalize transaction is missing, you can click "Withdraw Finalize" to finish the withdrawal.</p>
+			  
+    </div>
+  </div>
+</div>
+
+  <!--main content end-->
+
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="web3.js"></script>
+  <script type="text/javascript" src="jsbn.js"></script>
+  <script type="text/javascript" src="signer.js"></script>
+  <script type="text/javascript" src="laundromat.js"></script>
+
+</body>
+</html>
