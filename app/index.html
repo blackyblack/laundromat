@@ -2,23 +2,23 @@
 <html dir="ltr" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <link rel="shortcut icon" href="img/favicon.png">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <link rel="shortcut icon" href="img/favicon.png">
 
   <title>Laundromat</title>
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
 
-<!-- Superhero Bootstrap theme -->
-<link href="css/superhero.bootstrap.min.css" rel="stylesheet">  
+  <!-- Superhero Bootstrap theme -->
+  <link href="css/superhero.bootstrap.min.css" rel="stylesheet">  
 
-<style type="text/css" media="screen">
-@media screen {
-    .badge_large {
+  <style type="text/css" media="screen">
+    @media screen {
+      .badge_large {
         display: inline-block;
         min-width: 10px;
         padding: 3px 20px;
@@ -31,22 +31,43 @@
         text-align: center;
         background-color: #616161;
         border-radius: 5px;
-    }
-}</style>
-</head>
+      }
+    }</style>
+  </head>
 
-<script>
+  <script>
+
+isGeth = false;
+
+function init() {
+
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+    // Use Mist/MetaMask's provider
+    web3 = new Web3(web3.currentProvider);
+  } else {
+    console.log('No web3? You should consider trying MetaMask!')
+    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    isGeth = true;
+  }
+
+  if(isGeth) {
+
+    //hide unnecessary elements
+    document.getElementById('myaddress').style.display = 'block';
+  } else {
+    document.getElementById('myaddress').style.display = 'none';
+  }
+}
 
 function statusCallback(data) {
-
-  var web3 = new Web3();
 
   if(data.result != 'ok') {
     document.getElementById('queryStatusLabel').innerHTML = 'Error: ' + data.error;
     return;
   }
 
-  console.log(data.participants);
   document.getElementById('queryStatusLabel').innerHTML = 'Status: Success';
   document.getElementById('participants').innerHTML = data.participants;
   document.getElementById('gotParticipants').innerHTML = data.gotParticipants;
@@ -61,153 +82,163 @@ function generatePrivate() {
 
 function depositStart() {
   document.getElementById('depositLabel').innerHTML = 'Pending';
-  deposit(document.getElementById('address').value,document.getElementById('myaddress').value, document.getElementById('privateResult').value, depositCallback);
+
+  var myaddress = '';
+  if(isGeth) {
+
+    myaddress = document.getElementById('myaddress').value;
+  } else {
+
+    myaddress = web3.eth.accounts[0];
+  }
+
+  deposit(document.getElementById('address').value, myaddress, document.getElementById('privateResult').value, depositCallback);
 }
 
 function depositCallback(data) {
 
   if(data.result == 'ok') {
-     document.getElementById('depositLabel').innerHTML = 'Success';
-     return;
-  }
+   document.getElementById('depositLabel').innerHTML = 'Success';
+   return;
+ }
 
-  document.getElementById('depositLabel').innerHTML = 'Error: ' + data.error;
+ document.getElementById('depositLabel').innerHTML = 'Error: ' + data.error;
 }
 
 </script>  
 
-<body>
-	
-	    <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Laundromat</a>
+<body body onload="init();">
+  
+ <!-- Fixed navbar -->
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Laundromat</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Main</a></li>
+        <li><a href="new.html">New</a></li>
+        <li><a href="withdraw.html">Withdraw</a></li>
+        <li><a href="help.html">Help</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+
+<section id="container" class=" container">
+ <div class="row">
+  <div class="col-sm-12">
+   <div class="jumbotron">
+    <h1>Laundromat</h1>
+    <p>Ethereum Mixing Service</p>
+  </div>
+
+  <div class="page-header">
+    <h1>Main</h1>
+  </div>  
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Private Key</h3>
+    </div>
+    <div class="panel-body">
+      <p>A private key is necessary to participate in a mixing contract. Click "Generate" to generate a private key, and then <i>write it down</i>. If you lose your private key, you will not be able to recover your Ether after mixing.</p>
+      <form>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-info" type="button" name="Generate" value="Generate" onclick="generatePrivate()">Generate Key</button>
+          </span>
+          <input type="text" class="form-control" id="privateResult" name="privateResult">
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Main</a></li>
-            <li><a href="new.html">New</a></li>
-            <li><a href="withdraw.html">Withdraw</a></li>
-            <li><a href="help.html">Help</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-
-  <section id="container" class=" container">
-	  <div class="row">
-		<div class="col-sm-12">
-	  <div class="jumbotron">
-        <h1>Laundromat</h1>
-        <p>Ethereum Mixing Service</p>
+      </form>
     </div>
-      
-    <div class="page-header">
-        <h1>Main</h1>
-    </div>  
-    
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Private Key</h3>
-      </div>
-      <div class="panel-body">
-        <p>A private key is necessary to participate in a mixing contract. Click "Generate" to generate a private key, and then <i>write it down</i>. If you lose your private key, you will not be able to recover your Ether after mixing.</p>
-		    <form>
-				    <div class="input-group">
-              <span class="input-group-btn">
-                <button class="btn btn-info" type="button" name="Generate" value="Generate" onclick="generatePrivate()">Generate Key</button>
-              </span>
-              <input type="text" class="form-control" id="privateResult" name="privateResult">
-            </div>
-		    </form>
-      </div>
-    </div>
+  </div>
 
-    <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Check Contract Status</h3>
-            </div>
-            <div class="panel-body">
-	            <p>Enter the address of a mixing contract to display its status.</p>
-	            <p>If the number of participants is lower than the participant limit, you may join the contract. The "Payment" is the amount of Ether you need to deposit in order to participate in the contract.</p>
-			        <div id="queryStatusLabel" class="text-warning"></div>
-					    <form>
-							    <div class="input-group">
-			              <span class="input-group-btn">
-			                <button class="btn btn-info" type="button" name="Status" value="Status" onclick="getStatus(document.getElementById('address').value, statusCallback)">Check Status</button>
-			              </span>
-			              <input type="text" class="form-control" id="address">
-			            </div>
-					    </form>
-            </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Check Contract Status</h3>
     </div>
+    <div class="panel-body">
+     <p>Enter the address of a mixing contract to display its status.</p>
+     <p>If the number of participants is lower than the participant limit, you may join the contract. The "Payment" is the amount of Ether you need to deposit in order to participate in the contract.</p>
+     <div id="queryStatusLabel" class="text-warning"></div>
+     <form>
+       <div class="input-group">
+         <span class="input-group-btn">
+           <button class="btn btn-info" type="button" name="Status" value="Status" onclick="getStatus(document.getElementById('address').value, statusCallback)">Check Status</button>
+         </span>
+         <input type="text" class="form-control" id="address">
+       </div>
+     </form>
+   </div>
+ </div>
 
 
-    <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Contract Status</h3>
-            </div>
-            <div class="panel-body">
-				      <div class="bs-component">
-				        <ul class="nav nav-pills">
-				          <li class="active"><a href="#">Participant Limit:&nbsp;&nbsp;<span class="badge_large"><div name="participants" id="participants">--</div></span></a></li>
-				          <li class="active"><a href="#">Number of Participants:&nbsp;&nbsp;<span class="badge_large"><div name="gotParticipants" id="gotParticipants">--</div></span></a></li>
-				          <li class="active"><a href="#">Payment (ETH):&nbsp;&nbsp;<span class="badge_large"><div name="payment" id="payment">--</div></span></a></li>
-				        </ul>
-				      </div>
-            </div>
-            <div class="panel-footer">
-	            <p>Enter your Ethereum address below in order to join this contract. The "Payment" amount will be deducted from your account. Your account must be unlocked, see Help for details on how to do this. </p>
-                    <div id="depositLabel" class="text-warning"></div>
-					    <form>
-							    <div class="input-group">
-			              <span class="input-group-btn">
-			                <button class="btn btn-success" type="button" name="join" value="join" onclick="depositStart()">Join Contract</button>
-			              </span>
-			              <input type="text" class="form-control" id="myaddress" name="myaddress">
-			            </div>
-					    </form>
-      			</div>
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Contract Status</h3>
+  </div>
+  <div class="panel-body">
+    <div class="bs-component">
+      <ul class="nav nav-pills">
+        <li class="active"><a href="#">Participant Limit:&nbsp;&nbsp;<span class="badge_large"><div name="participants" id="participants">--</div></span></a></li>
+        <li class="active"><a href="#">Number of Participants:&nbsp;&nbsp;<span class="badge_large"><div name="gotParticipants" id="gotParticipants">--</div></span></a></li>
+        <li class="active"><a href="#">Payment (ETH):&nbsp;&nbsp;<span class="badge_large"><div name="payment" id="payment">--</div></span></a></li>
+      </ul>
     </div>
-    
-    
+  </div>
+  <div class="panel-footer">
+   <p>Enter your Ethereum address below in order to join this contract. The "Payment" amount will be deducted from your account. Your account must be unlocked, see Help for details on how to do this. </p>
+   <div id="depositLabel" class="text-warning"></div>
+   <form>
+     <div class="input-group">
+       <span class="input-group-btn">
+         <button class="btn btn-success" type="button" name="join" value="join" onclick="depositStart()">Join Contract</button>
+       </span>
+       <input type="text" class="form-control" id="myaddress" name="myaddress">
+     </div>
+   </form>
+ </div>
+</div>
+
+
 <br /><br />
 
 
 
-	  </div>
-	  </div>
-  </section>
-  <!--main content end-->
+</div>
+</div>
+</section>
+<!--main content end-->
 
-  <!-- js placed at the end of the document so the pages load faster -->
-  <script type="text/javascript" src="js/web3.js"></script>
-  <script type="text/javascript" src="js/jsbn.js"></script>
-  <script type="text/javascript" src="js/signer.js"></script>
-  <script type="text/javascript" src="js/laundromat.js"></script>
+<!-- js placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="js/web3.js"></script>
+<script type="text/javascript" src="js/jsbn.js"></script>
+<script type="text/javascript" src="js/signer.js"></script>
+<script type="text/javascript" src="js/laundromat.js"></script>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="js/jquery.min.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
 
-  <!-- End Bootstrap -->
+<!-- End Bootstrap -->
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.min.js"></script>
       <script src="js/respond.min.js"></script>
-    <![endif]-->
+      <![endif]-->
 
-</body>
-</html>
+    </body>
+    </html>

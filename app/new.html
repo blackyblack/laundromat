@@ -20,16 +20,47 @@
 
 <script>
 
-function createStart() {
+isGeth = false;
 
-  var web3 = new Web3();
+function init() {
+
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+    // Use Mist/MetaMask's provider
+    web3 = new Web3(web3.currentProvider);
+  } else {
+    console.log('No web3? You should consider trying MetaMask!')
+    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    isGeth = true;
+  }
+
+  if(isGeth) {
+
+    //hide unnecessary elements
+    document.getElementById('yourAddressDiv').style.display = 'block';
+  } else {
+    document.getElementById('yourAddressDiv').style.display = 'none';
+  }
+}
+
+function createStart() {
 
   document.getElementById('createLabel').innerHTML = 'Pending';
   document.getElementById('contractAddress').value = '';
 
   var payment = web3.toWei(document.getElementById('paymentEther').value, 'ether');
 
-  create(document.getElementById('yourAddress').value, document.getElementById('participantNumber').value, payment, createCallback);
+  var myaddress = '';
+  if(isGeth) {
+
+    myaddress = document.getElementById('yourAddress').value;
+  } else {
+
+    myaddress = web3.eth.accounts[0];
+  }
+
+  create(myaddress, document.getElementById('participantNumber').value, payment, createCallback);
 }
 
 function createCallback(data) {
@@ -46,7 +77,7 @@ function createCallback(data) {
 </script>  
 
 
-<body>
+<body body onload="init();">
 	
 	  <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -84,7 +115,7 @@ function createCallback(data) {
         <h1>New</h1>
     </div>  
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="yourAddressDiv">
       <div class="panel-heading">
         <h3 class="panel-title">Your Address</h3>
       </div>

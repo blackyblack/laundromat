@@ -14,7 +14,6 @@
  *
 */
 
-var web3 = new Web3();
 var BigInteger = jsbn.BigInteger;
 
 var cache = [
