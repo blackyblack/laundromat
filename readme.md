@@ -69,7 +69,7 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
    - 1 transaction to finish the withdrawal.
 
 - If the withdrawal is stuck at some point, you can check block explorer to see
-  how many steps left and click **Withdraw Step** button to advance withdrawal
+  how many steps are left, and click **Withdraw Step** button to advance withdrawal
   further.
 
 - If all steps are there, but the Finalize transaction is missing, you can
