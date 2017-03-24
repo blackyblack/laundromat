@@ -18,13 +18,14 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
 - Check the desired mixing contract status:
   - enter the contract address into `Query Status->Contract Address` eg
     `0x401e28717a6a35a50938bc7f290f2678fc0a2816`;
-  - Click "Status" button
+  - Click the **Status** button
 
 - If there are available seats, you can join the mixing ("Got participants" is
   less than "Participants limit").  You will then have "Payment (ETH)" Ether
   deducted from your account for the mixing.
 
-- To join the mixing:
+### Join the mixing contract
+
   - Enter the contract address into `Deposit->To contract` eg
     `0x401e28717a6a35a50938bc7f290f2678fc0a2816`;
   - Enter your Ethereum account (you will need to unlock it, check available
@@ -40,7 +41,9 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
     > geth attach personal.unlockAccount('your_account',"your_password") eg
     > personal.unlockAccount('0x401e28717a6a35a50938bc7f290f2678fc0a2816',"password")
     ```
-  - Click "Deposit" button
+  - Click the **Deposit** button
+
+### Withdraw from the mixing contract
 
 - When all participants are in, you can withdraw your money.
 
@@ -56,7 +59,7 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
     `0xeb5fa6cbf2aca03a0df228f2df67229e2d3bd01e`;
   - Enter your private key eg
     `24883375667666319798130594789127643442423595702572623965227685575198986951784`.
-  - Click "Withdraw" button.
+  - Click the **Withdraw** button.
 
 - The withdrawal process can take some time and a large amount of gas.
 
@@ -68,8 +71,10 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
   further.
 
 - If all steps are there, but the Finalize transaction is missing, you can
-  click "Withdraw Finalize" to finish the withdrawal.
+  click **Withdraw Finalize** to finish the withdrawal.
+
+### New mixing contract
 
 - A new mixing contract can be created from any account. You only need to set
   participants limit and payment from each participant, unlock your account and
-  click "Create" button.
+  click the **Create** button.
