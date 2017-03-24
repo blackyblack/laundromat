@@ -63,8 +63,10 @@ https://docs.google.com/document/d/1KtAn_gMATO2D2WLDPQdtS2IcmTZDUorFmfIlZm64-Ys
 
 - The withdrawal process can take some time and a large amount of gas.
 
-- The withdrawal process requires 1 transaction to start withdrawal, 1
-  transaction for each participant and 1 transaction to finish the withdrawal.
+- The withdrawal process requires all of the following transactions:
+   - 1 transaction to start withdrawal,
+   - 1 transaction for each participant,
+   - 1 transaction to finish the withdrawal.
 
 - If the withdrawal is stuck at some point, you can check block explorer to see
   how many steps left and click **Withdraw Step** button to advance withdrawal
